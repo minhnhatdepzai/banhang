@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ToyBee – Khám phá sản phẩm</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- HEADER GIỐNG INDEX -->
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="index.html#home" class="brand">ToyBee</a>
+            <nav class="main-nav">
+                <a href="index.html#home">Trang Chủ</a>
+                <a href="index.html#about">Giới thiệu</a>
+                <a href="explore.html">Sản Phẩm</a>
+                <a href="index.html#contact">Liên hệ</a>
+            </nav>
+            <div class="auth-area" id="authArea"></div>
+        </div>
+    </header>
+
+    <main>
+        <!-- BANNER SLIDER -->
+        <section class="section explore-banner">
+            <div class="container">
+                <div class="slider" id="topSlider">
+                    <div class="slide active">
+                        <img src="https://images.pexels.com/photos/3661357/pexels-photo-3661357.jpeg"
+                            alt="Ưu đãi đồ chơi Gấu bông">
+                        <div class="slide-caption">Gấu bông xinh xắn – Nhập mã GIAMGIA2 giảm 20%</div>
+                    </div>
+                    <div class="slide">
+                        <img src="https://images.pexels.com/photos/163036/pexels-photo-163036.jpeg"
+                            alt="Ưu đãi đồ chơi Siêu nhân">
+                        <div class="slide-caption">Siêu nhân BeeForce – Mua 2 tặng 1, số lượng giới hạn</div>
+                    </div>
+                    <div class="slide">
+                        <img src="https://images.pexels.com/photos/1148998/pexels-photo-1148998.jpeg"
+                            alt="Ưu đãi đồ chơi giáo dục">
+                        <div class="slide-caption">Đồ chơi STEM – Giúp bé vừa chơi vừa khám phá khoa học</div>
+                    </div>
+                    <button class="slider-arrow left" id="slPrev">‹</button>
+                    <button class="slider-arrow right" id="slNext">›</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- KHU KHUYẾN MÃI / BÁN CHẠY -->
+        <section class="section hot-section">
+            <div class="container">
+                <div class="hot-box">
+                    <h2>Sản phẩm bán chạy <span class="hot-label">Hot!</span></h2>
+                    <div class="hot-list">
+                        <!-- Gấu bông -->
+                        <div class="hot-item product-card" data-product-id="hot1"
+                            data-product-name="Combo Gấu bông HoneyBear" data-product-price="320000"
+                            data-product-img="https://images.pexels.com/photos/207891/pexels-photo-207891.jpeg">
+                            <img src="https://images.pexels.com/photos/207891/pexels-photo-207891.jpeg" alt="">
+                            <div class="title">Combo Gấu bông HoneyBear</div>
+                            <div class="price"></div>
+                            <div class="actions">
+                                <button class="btn add-cart-btn">Thêm giỏ hàng</button>
+                                <button class="btn buy-btn ghost">Mua ngay</button>
+                            </div>
+                        </div>
+
+                        <!-- Siêu nhân -->
+                        <div class="hot-item product-card" data-product-id="hot2"
+                            data-product-name="Siêu nhân BeeRider phát sáng" data-product-price="280000"
+                            data-product-img="https://images.pexels.com/photos/595804/pexels-photo-595804.jpeg">
+                            <img src="https://images.pexels.com/photos/595804/pexels-photo-595804.jpeg" alt="">
+                            <div class="title">Siêu nhân BeeRider phát sáng</div>
+                            <div class="price"></div>
+                            <div class="actions">
+                                <button class="btn add-cart-btn">Thêm giỏ hàng</button>
+                                <button class="btn buy-btn ghost">Mua ngay</button>
+                            </div>
+                        </div>
+
+                        <!-- STEM -->
+                        <div class="hot-item product-card" data-product-id="hot3"
+                            data-product-name="Bộ đất nặn SweetBee sáng tạo" data-product-price="190000"
+                            data-product-img="https://images.pexels.com/photos/3661195/pexels-photo-3661195.jpeg">
+                            <img src="https://images.pexels.com/photos/3661195/pexels-photo-3661195.jpeg" alt="">
+                            <div class="title">Bộ đất nặn SweetBee</div>
+                            <div class="price"></div>
+                            <div class="actions">
+                                <button class="btn add-cart-btn">Thêm giỏ hàng</button>
+                                <button class="btn buy-btn ghost">Mua ngay</button>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="hot-note">* Phải đăng nhập mới mua được và áp dụng mã giảm giá.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- KHU THEO LOẠI -->
+        <section class="section category-strip">
+            <div class="container">
+                <!-- GẤU BÔNG -->
+                <h2>Khu Gấu bông</h2>
+                <div class="strip-list">
+                    <div class="strip-item product-card" data-product-id="pl1" data-product-name="Gấu HoneyBear cổ nơ"
+                        data-product-price="210000"
+                        data-product-img="https://images.pexels.com/photos/207891/pexels-photo-207891.jpeg">
+                        <img src="https://images.pexels.com/photos/207891/pexels-photo-207891.jpeg" alt="">
+                        <div class="title">Gấu HoneyBear cổ nơ</div>
+                        <div class="price"></div>
+                        <div class="actions">
+                            <button class="btn add-cart-btn">Thêm giỏ hàng</button>
+                            <button class="btn buy-btn ghost">Mua ngay</button>
+                        </div>
+                    </div>
+
+                    <div class="strip-item product-card" data-product-id="pl2"
+                        data-product-name="Thỏ bông Beemo mềm mịn" data-product-price="230000"
+                        data-product-img="https://images.pexels.com/photos/459335/pexels-photo-459335.jpeg">
+                        <img src="https://images.pexels.com/photos/459335/pexels-photo-459335.jpeg" alt="">
+                        <div class="title">Thỏ bông Beemo mềm mịn</div>
+                        <div class="price"></div>
+                        <div class="actions">
+                            <button class="btn add-cart-btn">Thêm giỏ hàng</button>
+                            <button class="btn buy-btn ghost">Mua ngay</button>
+                        </div>
+                    </div>
+
+                    <div class="strip-item product-card" data-product-id="pl3" data-product-name="Cừu bông CloudBee"
+                        data-product-price="250000"
+                        data-product-img="https://images.pexels.com/photos/979503/pexels-photo-979503.jpeg">
+                        <img src="https://images.pexels.com/photos/979503/pexels-photo-979503.jpeg" alt="">
+                        <div class="title">Cừu bông CloudBee</div>
+                        <div class="price"></div>
+                        <div class="actions">
+                            <button class="btn add-cart-btn">Thêm giỏ hàng</button>
+                            <button class="btn buy-btn ghost">Mua ngay</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="more-products">
+                    <a href="category.html?cat=plush" class="btn see-more">Xem tất cả Gấu bông ➜</a>
+                </div>
+
+                <!-- SIÊU NHÂN -->
+                <h2 class="mt-40">Khu Siêu nhân</h2>
+                <div class="strip-list">
+                    <div class="strip-item product-card" data-product-id="hero1"
+                        data-product-name="Siêu nhân BeeForce đỏ" data-product-price="180000"
+                        data-product-img="https://images.pexels.com/photos/595804/pexels-photo-595804.jpeg">
+                        <img src="https://images.pexels.com/photos/595804/pexels-photo-595804.jpeg" alt="">
+                        <div class="title">Siêu nhân BeeForce đỏ</div>
+                        <div class="price"></div>
+                        <div class="actions">
+                            <button class="btn add-cart-btn">Thêm giỏ hàng</button>
+                            <button class="btn buy-btn ghost">Mua ngay</button>
+                        </div>
+                    </div>
+
+                    <div class="strip-item product-card" data-product-id="hero2"
+                        data-product-name="Siêu nhân BeeForce xanh" data-product-price="180000"
+                        data-product-img="https://images.pexels.com/photos/595804/pexels-photo-595804.jpeg">
+                        <img src="https://images.pexels.com/photos/595804/pexels-photo-595804.jpeg" alt="">
+                        <div class="title">Siêu nhân BeeForce xanh</div>
+                        <div class="price"></div>
+                        <div class="actions">
+                            <button class="btn add-cart-btn">Thêm giỏ hàng</button>
+                            <button class="btn buy-btn ghost">Mua ngay</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="more-products">
+                    <a href="category.html?cat=hero" class="btn see-more">Xem tất cả Siêu nhân ➜</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- MÃ GIẢM GIÁ -->
+        <section class="section coupon-section">
+            <div class="container">
+                <h2>Mã giảm giá hiện có</h2>
+                <div class="coupon-list">
+                    <div class="coupon-card">
+                        <div class="code">GIAMGIA1</div>
+                        <p>Giảm 10% cho toàn bộ đơn hàng.</p>
+                    </div>
+                    <div class="coupon-card">
+                        <div class="code">GIAMGIA2</div>
+                        <p>Giảm 20% cho đơn từ 500.000đ.</p>
+                    </div>
+                </div>
+                <p class="muted">Áp dụng khi thanh toán tại trang giỏ hàng. Nhớ đăng nhập để sử dụng.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div>
+                <h3 class="footer-brand">ToyBee</h3>
+                <p>Cửa hàng đồ chơi sáng tạo lấy cảm hứng từ tổ ong – an toàn, chính hãng, giao nhanh toàn quốc.</p>
+            </div>
+            <div>
+                <h4>Danh mục</h4>
+                <ul>
+                    <li><a href="category.html?cat=plush">Gấu bông</a></li>
+                    <li><a href="category.html?cat=hero">Siêu nhân</a></li>
+                    <li><a href="category.html?cat=vehicle">Xe đồ chơi</a></li>
+                    <li><a href="category.html?cat=stem">Đồ chơi STEM</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Hỗ trợ khách hàng</h4>
+                <ul>
+                    <li>Hotline: 0901 234 567</li>
+                    <li>Email: support@toybee.vn</li>
+                </ul>
+            </div>
+            <div>
+                <h4>Kết nối với ToyBee</h4>
+                <div class="footer-socials">
+                    <a href="#">Facebook</a>
+                    <a href="#">Instagram</a>
+                    <a href="#">Tiktok</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © <span id="y"></span> ToyBee.
+        </div>
+    </footer>
+
+    <!-- MINI CART PANEL DÙNG CHUNG -->
+    <div id="cartOverlay" class="cart-overlay"></div>
+    <aside id="cartPanel" class="cart-panel">
+        <div class="cart-header">
+            <h3>Giỏ hàng</h3>
+            <button id="cartClose" class="cart-close">&times;</button>
+        </div>
+        <div id="cartItems" class="cart-items"></div>
+        <div class="cart-summary">
+            <div class="cart-row">
+                <span>Tổng phụ:</span>
+                <span id="cartSubtotal">0đ</span>
+            </div>
+            <button id="viewCartBtn" class="btn full">Xem giỏ hàng</button>
+            <button id="checkoutBtn" class="btn full black">Thanh toán</button>
+        </div>
+    </aside>
+
+    <script src="app.js"></script>
+    <script>
+        // Slider auto 2s
+        const slides = document.querySelectorAll('#topSlider .slide');
+        let si = 0;
+        function showSlide(i) {
+            slides.forEach((s, idx) => s.classList.toggle('active', idx === i));
+        }
+        function nextSlide(delta = 1) {
+            si = (si + delta + slides.length) % slides.length;
+            showSlide(si);
+        }
+        let sliderTimer = setInterval(nextSlide, 2000);
+        document.getElementById('slPrev').onclick = () => { nextSlide(-1); resetSlider(); };
+        document.getElementById('slNext').onclick = () => { nextSlide(1); resetSlider(); };
+        function resetSlider() {
+            clearInterval(sliderTimer);
+            sliderTimer = setInterval(nextSlide, 2000);
+        }
+
+        // Bind product cards (thêm giỏ / mua)
+        function bindProductCards(root = document) {
+            const logged = typeof isLoggedIn === 'function' && isLoggedIn();
+            root.querySelectorAll('.product-card[data-product-id]').forEach(card => {
+                const id = card.dataset.productId;
+                const name = card.dataset.productName;
+                const price = Number(card.dataset.productPrice || 0);
+                const img = card.dataset.productImg || card.querySelector('img')?.src || '';
+                const priceEl = card.querySelector('.price');
+                const addBtn = card.querySelector('.add-cart-btn');
+                const buyBtn = card.querySelector('.buy-btn');
+
+                if (priceEl) {
+                    priceEl.textContent = logged && price
+                        ? money(price)
+                        : 'Đăng nhập để thấy giá';
+                }
+
+                const product = { id, name, price, images: [img] };
+
+                if (addBtn) {
+                    addBtn.addEventListener('click', e => {
+                        e.preventDefault();
+                        if (typeof addToCart === 'function' && addToCart(product)) {
+                            if (typeof openCart === 'function') openCart();
+                        }
+                    });
+                }
+
+                if (buyBtn) {
+                    buyBtn.addEventListener('click', e => {
+                        e.preventDefault();
+                        if (typeof addToCart === 'function' && addToCart(product)) {
+                            location.href = 'cart.html';
+                        }
+                    });
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            bindProductCards();
+        });
+    </script>
+</body>
+
+</html>

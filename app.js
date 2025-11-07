@@ -13,14 +13,20 @@ $$('a[data-link]').forEach(a => {
 });
 
 /* ===== Footer year ===== */
-$("#y").textContent = new Date().getFullYear();
+$("#y") && ($("#y").textContent = new Date().getFullYear());
 
-/* ===== Back to top ===== */
+/* ===== Back to top (chỉ nếu tồn tại) ===== */
 const topBtn = $("#backToTop");
-window.addEventListener('scroll', () => {
-    (window.scrollY > 300) ? topBtn.classList.add('show') : topBtn.classList.remove('show');
-});
-topBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+if (topBtn) {
+    window.addEventListener('scroll', () => {
+        (window.scrollY > 300)
+            ? topBtn.classList.add('show')
+            : topBtn.classList.remove('show');
+    });
+    topBtn.addEventListener('click', () =>
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+    );
+}
 
 /* ===== Reveal on scroll ===== */
 const io = new IntersectionObserver((entries) => {
@@ -98,7 +104,7 @@ $$(".toy-card").forEach(card => {
     });
 });
 
-/* ===== PRODUCTS DATA ===== */
+/* ===== PRODUCTS DATA (trang index) ===== */
 const PRODUCTS = [
     {
         id: "sp1",
@@ -141,7 +147,6 @@ const PRODUCTS = [
         price: 275000,
         images: ["img/sp6-1.jpg", "img/sp6-2.jpg", "img/sp6-3.jpg"],
         tags: ["LED", "3+"]
-
     },
     {
         id: "sp7",
@@ -166,12 +171,78 @@ function loadCart() {
 function saveCart(cart) {
     localStorage.setItem('toybee_cart', JSON.stringify(cart));
 }
+
+/* ===== LOGIN CHECK ===== */
+function isLoggedIn() {
+    return !!localStorage.getItem('toybee_current');
+}
+
+/* ===== CART PANEL ELEMENTS (dùng chung tất cả trang) ===== */
+const cartPanel = $("#cartPanel");
+const cartOverlay = $("#cartOverlay");
+
+/* ===== MINI CART RENDER + COUNT ===== */
+function updateCartCount() {
+    const el = $("#cartCount");
+    if (!el) return;
+    const cart = loadCart();
+    const total = cart.reduce((s, i) => s + i.qty, 0);
+    if (total > 0) {
+        el.textContent = total;
+        el.style.display = 'flex';
+    } else {
+        el.textContent = '0';
+        el.style.display = 'none';
+    }
+}
+
+function renderMiniCart() {
+    const box = $("#cartItems");
+    const subEl = $("#cartSubtotal");
+    if (!box || !subEl) return; // trang không có panel thì thôi
+
+    const cart = loadCart();
+    box.innerHTML = '';
+    let subtotal = 0;
+
+    if (cart.length === 0) {
+        box.innerHTML = '<p class="cart-list-empty">Giỏ hàng trống. Hãy chọn vài món đáng yêu nhé 🧸</p>';
+    } else {
+        cart.forEach(it => {
+            subtotal += it.price * it.qty;
+            const row = document.createElement('div');
+            row.className = 'cart-item';
+            row.innerHTML = `
+                <div class="ci-img"><img src="${it.img}" alt=""></div>
+                <div class="ci-info">
+                    <div class="ci-name">${it.name}</div>
+                    <div class="ci-price">${money(it.price)}</div>
+                    <div class="ci-qty">
+                        <button data-act="dec">-</button>
+                        <span>${it.qty}</span>
+                        <button data-act="inc">+</button>
+                    </div>
+                </div>
+                <button class="ci-remove">&times;</button>
+            `;
+            const [decBtn, incBtn] = row.querySelectorAll('.ci-qty button');
+            decBtn.addEventListener('click', () => changeQty(it.id, -1));
+            incBtn.addEventListener('click', () => changeQty(it.id, 1));
+            row.querySelector('.ci-remove').addEventListener('click', () => removeItem(it.id));
+            box.appendChild(row);
+        });
+    }
+
+    subEl.textContent = money(subtotal);
+    updateCartCount();
+}
+
+/* ===== CART OPERATIONS ===== */
 function addToCart(p) {
-    // Nếu chưa đăng nhập thì không cho thêm
     if (!isLoggedIn()) {
         alert('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.');
         window.location.href = 'login/login.html';
-        return false; // báo cho chỗ gọi biết là thất bại
+        return false;
     }
 
     const cart = loadCart();
@@ -180,9 +251,9 @@ function addToCart(p) {
     else cart.push({ id: p.id, name: p.name, price: p.price, img: p.images[0], qty: 1 });
     saveCart(cart);
     renderMiniCart();
-    return true; // thêm thành công
+    openCart();
+    return true;
 }
-
 
 function changeQty(id, delta) {
     const cart = loadCart();
@@ -202,37 +273,61 @@ function removeItem(id) {
     renderMiniCart();
 }
 
-/* ===== RENDER PRODUCT CARDS ===== */
+function openCart() {
+    if (!cartPanel || !cartOverlay) return;
+    cartPanel.classList.add('open');
+    cartOverlay.classList.add('show');
+}
+function closeCart() {
+    if (!cartPanel || !cartOverlay) return;
+    cartPanel.classList.remove('open');
+    cartOverlay.classList.remove('show');
+}
+
+/* ===== CART UI EVENTS ===== */
+$("#cartClose")?.addEventListener('click', closeCart);
+cartOverlay?.addEventListener('click', closeCart);
+
+$("#viewCartBtn")?.addEventListener('click', () => {
+    location.href = 'cart.html';
+});
+$("#checkoutBtn")?.addEventListener('click', () => {
+    location.href = 'cart.html';
+});
+
+$("#cartToggle")?.addEventListener('click', () => {
+    openCart();
+});
+
+/* ===== INDEX: render carousel nếu có ===== */
 function makeCard(p) {
     const wrap = document.createElement('div');
     wrap.className = 'card';
     wrap.dataset.id = p.id;
     wrap.innerHTML = `
-    <div class="pic">
-      <img alt="${p.name}" src="${p.images[0]}">
-    </div>
-    <div class="info">
-      <div class="name">${p.name}</div>
-      <div class="tags">${p.tags.join(' • ')}</div>
-      <div class="price">${money(p.price)}</div>
-      <div class="card-actions">
-        <button class="btn add-cart-btn">Thêm giỏ hàng</button>
-        <button class="btn buy-btn ghost">Mua ngay</button>
-      </div>
-    </div>
-  `;
+        <div class="pic">
+            <img alt="${p.name}" src="${p.images[0]}">
+        </div>
+        <div class="info">
+            <div class="name">${p.name}</div>
+            <div class="tags">${p.tags.join(' • ')}</div>
+            <div class="price">${money(p.price)}</div>
+            <div class="card-actions">
+                <button class="btn add-cart-btn">Thêm giỏ hàng</button>
+                <button class="btn buy-btn ghost">Mua ngay</button>
+            </div>
+        </div>
+    `;
 
     const img = $('img', wrap);
     const addBtn = $('.add-cart-btn', wrap);
     const buyBtn = $('.buy-btn', wrap);
 
-    /* Hover 1s rồi auto đổi ảnh */
     let hoverTimer = null;
     let slideTimer = null;
     let idx = 0;
 
     wrap.addEventListener('mouseenter', () => {
-        // chờ 1s rồi mới bắt đầu slide
         hoverTimer = setTimeout(() => {
             if (p.images.length <= 1) return;
             slideTimer = setInterval(() => {
@@ -252,18 +347,14 @@ function makeCard(p) {
             slideTimer = null;
         }
         idx = 0;
-        img.src = p.images[0]; // trả về ảnh đầu
+        img.src = p.images[0];
     });
 
-    /* Thêm giỏ hàng -> chỉ thêm + mở thanh bên nếu đã đăng nhập */
     addBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        if (addToCart(p)) {
-            openCart();
-        }
+        addToCart(p);
     });
 
-    /* Mua ngay -> thêm + sang trang giỏ hàng, nếu chưa login sẽ bị chặn */
     buyBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         if (addToCart(p)) {
@@ -271,10 +362,8 @@ function makeCard(p) {
         }
     });
 
-
     return wrap;
 }
-
 
 let ring = PRODUCTS.slice();
 function renderProducts() {
@@ -286,7 +375,6 @@ function renderProducts() {
     viewport.appendChild(list);
 }
 renderProducts();
-
 $("#prevBtn")?.addEventListener('click', () => {
     ring.unshift(ring.pop());
     renderProducts();
@@ -296,74 +384,7 @@ $("#nextBtn")?.addEventListener('click', () => {
     renderProducts();
 });
 
-/* ===== MINI CART UI ===== */
-const cartPanel = $("#cartPanel");
-const cartOverlay = $("#cartOverlay");
-
-function renderMiniCart() {
-    const box = $("#cartItems");
-    const subEl = $("#cartSubtotal");
-    if (!box || !subEl) return;
-    const cart = loadCart();
-    box.innerHTML = '';
-    let subtotal = 0;
-
-    if (cart.length === 0) {
-        box.innerHTML = '<p class="cart-list-empty">Giỏ hàng trống. Hãy chọn vài món đáng yêu nhé 🧸</p>';
-    } else {
-        cart.forEach(it => {
-            subtotal += it.price * it.qty;
-            const row = document.createElement('div');
-            row.className = 'cart-item';
-            row.innerHTML = `
-        <div class="ci-img"><img src="${it.img}" alt=""></div>
-        <div class="ci-info">
-          <div class="ci-name">${it.name}</div>
-          <div class="ci-price">${money(it.price)}</div>
-          <div class="ci-qty">
-            <button data-act="dec">-</button>
-            <span>${it.qty}</span>
-            <button data-act="inc">+</button>
-          </div>
-        </div>
-        <button class="ci-remove">&times;</button>
-      `;
-            const [decBtn, incBtn] = row.querySelectorAll('.ci-qty button');
-            decBtn.addEventListener('click', () => changeQty(it.id, -1));
-            incBtn.addEventListener('click', () => changeQty(it.id, 1));
-            row.querySelector('.ci-remove').addEventListener('click', () => removeItem(it.id));
-            box.appendChild(row);
-        });
-    }
-
-    subEl.textContent = money(subtotal);
-}
-
-function openCart() {
-    if (cartPanel) {
-        cartPanel.classList.add('open');
-        cartOverlay?.classList.add('show');
-    }
-}
-function closeCart() {
-    if (cartPanel) {
-        cartPanel.classList.remove('open');
-        cartOverlay?.classList.remove('show');
-    }
-}
-
-$("#cartClose")?.addEventListener('click', closeCart);
-cartOverlay?.addEventListener('click', closeCart);
-$("#viewCartBtn")?.addEventListener('click', () => {
-    location.href = 'cart.html';
-});
-$("#checkoutBtn")?.addEventListener('click', () => {
-    location.href = 'cart.html';
-});
-
-window.addEventListener('load', renderMiniCart);
-
-/* ===== AUTH: user mặc định + avatar ===== */
+/* ===== AUTH: default user + avatar ===== */
 function ensureDefaultUser() {
     const users = JSON.parse(localStorage.getItem('toybee_users') || '[]');
     if (!users.find(u => u.account === '0901234567')) {
@@ -376,11 +397,6 @@ function ensureDefaultUser() {
         localStorage.setItem('toybee_users', JSON.stringify(users));
     }
 }
-function isLoggedIn() {
-    return !!localStorage.getItem('toybee_current');
-}
-
-ensureDefaultUser();
 
 function updateAuthUI() {
     const current = JSON.parse(localStorage.getItem('toybee_current') || 'null');
@@ -389,24 +405,37 @@ function updateAuthUI() {
 
     if (current) {
         const initials = (current.name || current.account || 'U')
-            .trim().split(' ').map(x => x[0]).slice(-2).join('').toUpperCase();
+            .trim().split(' ')
+            .map(x => x[0])
+            .slice(-2)
+            .join('')
+            .toUpperCase();
         box.innerHTML = `
-      <div class="user-chip">
-        <div class="avatar">${initials}</div>
-        <div>
-          <div style="font-weight:800">${current.name || current.account}</div>
-          <button id="logoutBtn" class="btn tiny ghost">Đăng xuất</button>
-        </div>
-      </div>
-    `;
+            <div class="user-chip">
+                <div class="avatar">${initials}</div>
+                <div>
+                    <div style="font-weight:800">${current.name || current.account}</div>
+                    <button id="logoutBtn" class="btn tiny ghost">Đăng xuất</button>
+                </div>
+            </div>
+        `;
         $("#logoutBtn")?.addEventListener('click', () => {
             localStorage.removeItem('toybee_current');
             updateAuthUI();
+            renderMiniCart();
         });
     } else {
         box.innerHTML = `
-      <a class="btn ghost" href="login/login.html">Đăng nhập</a>
-      <a class="btn" href="login/register.html">Đăng ký</a>`;
+            <a class="btn ghost" href="login/login.html">Đăng nhập</a>
+            <a class="btn" href="login/register.html">Đăng ký</a>
+        `;
     }
 }
+
+ensureDefaultUser();
 updateAuthUI();
+
+/* ===== INIT CART LÚC LOAD ===== */
+window.addEventListener('load', () => {
+    renderMiniCart();
+});

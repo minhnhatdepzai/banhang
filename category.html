@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ToyBee – Danh mục sản phẩm</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- HEADER GIỐNG INDEX -->
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="index.html#home" class="brand">ToyBee</a>
+            <nav class="main-nav">
+                <a href="index.html#home">Trang Chủ</a>
+                <a href="index.html#about">Giới thiệu</a>
+                <a href="explore.html">Sản Phẩm</a>
+                <a href="index.html#contact">Liên hệ</a>
+            </nav>
+            <div class="auth-area" id="authArea"></div>
+        </div>
+    </header>
+
+    <div class="container cart-page">
+        <h1 id="catTitle">Tất cả sản phẩm</h1>
+
+        <div class="cat-layout">
+            <!-- FILTER -->
+            <aside class="cat-filter">
+                <h3>Thương hiệu</h3>
+                <div id="brandList"></div>
+
+                <h3>Mức giá</h3>
+                <label><input type="checkbox" name="price" value="lt100"> Dưới 100.000đ</label>
+                <label><input type="checkbox" name="price" value="100-300"> 100.000đ - 300.000đ</label>
+                <label><input type="checkbox" name="price" value="gt300"> Trên 300.000đ</label>
+
+                <h3>Loại</h3>
+                <div id="typeList"></div>
+
+                <p class="muted" style="font-size:11px;margin-top:6px">
+                    Có thể chọn nhiều loại. Bộ lọc áp dụng ngay cho danh sách bên phải.
+                </p>
+            </aside>
+
+            <!-- LIST -->
+            <section id="catList" class="cat-list"></section>
+        </div>
+    </div>
+
+    <!-- MINI CART PANEL -->
+    <div id="cartOverlay" class="cart-overlay"></div>
+    <aside id="cartPanel" class="cart-panel">
+        <div class="cart-header">
+            <h3>Giỏ hàng</h3>
+            <button id="cartClose" class="cart-close">&times;</button>
+        </div>
+        <div id="cartItems" class="cart-items"></div>
+        <div class="cart-summary">
+            <div class="cart-row">
+                <span>Tổng phụ:</span>
+                <span id="cartSubtotal">0đ</span>
+            </div>
+            <button id="viewCartBtn" class="btn full">Xem giỏ hàng</button>
+            <button id="checkoutBtn" class="btn full black">Thanh toán</button>
+        </div>
+    </aside>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div>
+                <h3 class="footer-brand">ToyBee</h3>
+                <p>Danh mục sản phẩm chi tiết theo từng khu chuyên biệt.</p>
+            </div>
+            <div>
+                <h4>Khu sản phẩm</h4>
+                <ul>
+                    <li><a href="category.html?cat=plush">Gấu bông</a></li>
+                    <li><a href="category.html?cat=hero">Siêu nhân</a></li>
+                    <li><a href="category.html?cat=vehicle">Xe đồ chơi</a></li>
+                    <li><a href="category.html?cat=stem">Đồ chơi STEM</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Hỗ trợ</h4>
+                <ul>
+                    <li>Hotline: 0901 234 567</li>
+                </ul>
+            </div>
+            <div>
+                <h4>Kết nối</h4>
+                <div class="footer-socials">
+                    <a href="#">Facebook</a>
+                    <a href="#">Instagram</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © <span id="y"></span> ToyBee.
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+    <script>
+        // ===== DATA: ~56 sản phẩm demo (ảnh mạng) =====
+        const ALL_PRODUCTS = [
+            /* --- PLUSH --- */
+            { id: "pl1", cat: "plush", name: "Gấu HoneyBear cổ nơ", brand: "HoneyToy", type: "Gấu bông", price: 210000, img: "https://images.pexels.com/photos/207891/pexels-photo-207891.jpeg" },
+            { id: "pl2", cat: "plush", name: "Thỏ bông Beemo", brand: "BeeSoft", type: "Gấu bông", price: 230000, img: "https://images.pexels.com/photos/459335/pexels-photo-459335.jpeg" },
+            { id: "pl3", cat: "plush", name: "Cừu bông CloudBee", brand: "HoneyToy", type: "Gấu bông", price: 250000, img: "https://images.pexels.com/photos/979503/pexels-photo-979503.jpeg" },
+            { id: "pl4", cat: "plush", name: "Gối ôm ong vàng SweetBee", brand: "KidBee", type: "Gối ôm", price: 320000, img: "https://images.pexels.com/photos/2704995/pexels-photo-2704995.jpeg" },
+            { id: "pl5", cat: "plush", name: "Gấu nâu ClassicBear", brand: "ToyBee", type: "Gấu bông", price: 190000, img: "https://images.pexels.com/photos/207891/pexels-photo-207891.jpeg" },
+            { id: "pl6", cat: "plush", name: "Gấu trắng PolarBee", brand: "HoneyToy", type: "Gấu bông", price: 280000, img: "https://images.pexels.com/photos/266004/pexels-photo-266004.jpeg" },
+            { id: "pl7", cat: "plush", name: "Cặp gấu CoupleBee", brand: "ToyBee", type: "Gấu đôi", price: 390000, img: "https://images.pexels.com/photos/207891/pexels-photo-207891.jpeg" },
+            { id: "pl8", cat: "plush", name: "Llama bông BôngMây", brand: "BeeSoft", type: "Thú bông khác", price: 260000, img: "https://images.pexels.com/photos/979503/pexels-photo-979503.jpeg" },
+            { id: "pl9", cat: "plush", name: "Thú bông DoreBee", brand: "KidBee", type: "Nhân vật", price: 310000, img: "https://images.pexels.com/photos/459335/pexels-photo-459335.jpeg" },
+            { id: "pl10", cat: "plush", name: "Gối ôm dài HoneySnake", brand: "ToyBee", type: "Gối ôm", price: 340000, img: "https://images.pexels.com/photos/979503/pexels-photo-979503.jpeg" },
+            { id: "pl11", cat: "plush", name: "Heo bông Mập Mạp", brand: "HoneyToy", type: "Thú bông khác", price: 220000, img: "https://images.pexels.com/photos/207891/pexels-photo-207891.jpeg" },
+            { id: "pl12", cat: "plush", name: "Mèo bông BeeCat", brand: "BeeSoft", type: "Nhân vật", price: 270000, img: "https://images.pexels.com/photos/979503/pexels-photo-979503.jpeg" },
+            { id: "pl13", cat: "plush", name: "Vịt bông Lemon", brand: "ToyBee", type: "Thú bông khác", price: 180000, img: "https://images.pexels.com/photos/459335/pexels-photo-459335.jpeg" },
+            { id: "pl14", cat: "plush", name: "Cáo bông FoxBee", brand: "HoneyToy", type: "Thú bông khác", price: 260000, img: "https://images.pexels.com/photos/979503/pexels-photo-979503.jpeg" },
+            { id: "pl15", cat: "plush", name: "Khủng long bông DinoBee", brand: "KidBee", type: "Nhân vật", price: 295000, img: "https://images.pexels.com/photos/979503/pexels-photo-979503.jpeg" },
+            { id: "pl16", cat: "plush", name: "Chó bông PuppyBee", brand: "ToyBee", type: "Thú bông khác", price: 205000, img: "https://images.pexels.com/photos/979503/pexels-photo-979503.jpeg" },
+
+            /* --- HERO --- */
+            { id: "h1", cat: "hero", name: "Siêu nhân BeeForce đỏ", brand: "BeeSoft", type: "Siêu nhân đơn", price: 180000, img: "https://images.pexels.com/photos/595804/pexels-photo-595804.jpeg" },
+            { id: "h2", cat: "hero", name: "Siêu nhân BeeForce xanh", brand: "BeeSoft", type: "Siêu nhân đơn", price: 180000, img: "https://images.pexels.com/photos/595804/pexels-photo-595804.jpeg" },
+            { id: "h3", cat: "hero", name: "Bộ 5 siêu nhân BeeLegend", brand: "HoneyToy", type: "Bộ combo", price: 420000, img: "https://images.pexels.com/photos/595804/pexels-photo-595804.jpeg" },
+            { id: "h4", cat: "hero", name: "Siêu nhân BeeStorm phát sáng", brand: "KidBee", type: "Có đèn & âm thanh", price: 350000, img: "https://images.pexels.com/photos/595804/pexels-photo-595804.jpeg" },
+            { id: "h5", cat: "hero", name: "Siêu nhân BeeWing bay lượn", brand: "ToyBee", type: "Siêu nhân đơn", price: 260000, img: "https://images.pexels.com/photos/595804/pexels-photo-595804.jpeg" },
+            { id: "h6", cat: "hero", name: "Siêu nhân BeeTank giáp nặng", brand: "HoneyToy", type: "Siêu nhân đơn", price: 310000, img: "https://images.pexels.com/photos/595804/pexels-photo-595804.jpeg" },
+            { id: "h7", cat: "hero", name: "Siêu nhân BeeGalaxy", brand: "KidBee", type: "Có đèn & âm thanh", price: 390000, img: "https://images.pexels.com/photos/595804/pexels-photo-595804.jpeg" },
+            { id: "h8", cat: "hero", name: "Siêu nhân BeeRider moto", brand: "BeeSoft", type: "Siêu nhân đơn", price: 240000, img: "https://images.pexels.com/photos/595804/pexels-photo-595804.jpeg" },
+            { id: "h9", cat: "hero", name: "Siêu nhân BeeShadow", brand: "ToyBee", type: "Siêu nhân đơn", price: 200000, img: "https://images.pexels.com/photos/595804/pexels-photo-595804.jpeg" },
+            { id: "h10", cat: "hero", name: "Siêu nhân BeeVolt điện", brand: "HoneyToy", type: "Có đèn & âm thanh", price: 360000, img: "https://images.pexels.com/photos/595804/pexels-photo-595804.jpeg" },
+            { id: "h11", cat: "hero", name: "Siêu nhân BeeSteel", brand: "ToyBee", type: "Siêu nhân đơn", price: 280000, img: "https://images.pexels.com/photos/595804/pexels-photo-595804.jpeg" },
+            { id: "h12", cat: "hero", name: "Siêu nhân BeeAqua", brand: "KidBee", type: "Siêu nhân đơn", price: 230000, img: "https://images.pexels.com/photos/595804/pexels-photo-595804.jpeg" },
+            { id: "h13", cat: "hero", name: "Siêu nhân BeePhoenix", brand: "HoneyToy", type: "Bộ combo", price: 450000, img: "https://images.pexels.com/photos/595804/pexels-photo-595804.jpeg" },
+            { id: "h14", cat: "hero", name: "Siêu nhân BeeKnight", brand: "BeeSoft", type: "Siêu nhân đơn", price: 265000, img: "https://images.pexels.com/photos/595804/pexels-photo-595804.jpeg" },
+            { id: "h15", cat: "hero", name: "Siêu nhân BeeThunder", brand: "ToyBee", type: "Có đèn & âm thanh", price: 370000, img: "https://images.pexels.com/photos/595804/pexels-photo-595804.jpeg" },
+            { id: "h16", cat: "hero", name: "Siêu nhân BeeFusion set 3", brand: "KidBee", type: "Bộ combo", price: 399000, img: "https://images.pexels.com/photos/595804/pexels-photo-595804.jpeg" },
+
+            /* --- VEHICLE --- */
+            { id: "v1", cat: "vehicle", name: "Xe điều khiển BeeRacer", brand: "ToyBee", type: "Xe điều khiển", price: 310000, img: "https://images.pexels.com/photos/163768/pexels-photo-163768.jpeg" },
+            { id: "v2", cat: "vehicle", name: "Xe jeep địa hình Honey4x4", brand: "HoneyToy", type: "Xe điều khiển", price: 420000, img: "https://images.pexels.com/photos/163768/pexels-photo-163768.jpeg" },
+            { id: "v3", cat: "vehicle", name: "Xe bus trường học BeeBus", brand: "BeeSoft", type: "Xe mô hình", price: 120000, img: "https://images.pexels.com/photos/65176/pexels-photo-65176.jpeg" },
+            { id: "v4", cat: "vehicle", name: "Xe cứu hỏa FireBee", brand: "ToyBee", type: "Xe mô hình", price: 150000, img: "https://images.pexels.com/photos/65176/pexels-photo-65176.jpeg" },
+            { id: "v5", cat: "vehicle", name: "Xe cảnh sát PoliceBee", brand: "ToyBee", type: "Xe mô hình", price: 150000, img: "https://images.pexels.com/photos/65176/pexels-photo-65176.jpeg" },
+            { id: "v6", cat: "vehicle", name: "Bộ gara xe BeeCity", brand: "KidBee", type: "Playset", price: 380000, img: "https://images.pexels.com/photos/65176/pexels-photo-65176.jpeg" },
+            { id: "v7", cat: "vehicle", name: "Xe tải chở ong HoneyTruck", brand: "HoneyToy", type: "Xe mô hình", price: 210000, img: "https://images.pexels.com/photos/65176/pexels-photo-65176.jpeg" },
+            { id: "v8", cat: "vehicle", name: "Xe công trình BeeBuilder", brand: "BeeSoft", type: "Xe mô hình", price: 230000, img: "https://images.pexels.com/photos/65176/pexels-photo-65176.jpeg" },
+            { id: "v9", cat: "vehicle", name: "Xe moto thể thao BeeMoto", brand: "ToyBee", type: "Xe mô hình", price: 190000, img: "https://images.pexels.com/photos/65176/pexels-photo-65176.jpeg" },
+            { id: "v10", cat: "vehicle", name: "Bộ 5 xe cứu hộ BeeRescue", brand: "ToyBee", type: "Playset", price: 360000, img: "https://images.pexels.com/photos/65176/pexels-photo-65176.jpeg" },
+            { id: "v11", cat: "vehicle", name: "Xe bus 2 tầng BeeTour", brand: "HoneyToy", type: "Xe mô hình", price: 175000, img: "https://images.pexels.com/photos/65176/pexels-photo-65176.jpeg" },
+            { id: "v12", cat: "vehicle", name: "Xe lửa đồ chơi BeeTrain", brand: "KidBee", type: "Playset", price: 410000, img: "https://images.pexels.com/photos/65176/pexels-photo-65176.jpeg" },
+
+            /* --- STEM / KHÁC --- */
+            { id: "s1", cat: "stem", name: "Bộ xếp hình gỗ BeeBlocks 100pcs", brand: "ToyBee", type: "Xếp hình", price: 270000, img: "https://images.pexels.com/photos/1148998/pexels-photo-1148998.jpeg" },
+            { id: "s2", cat: "stem", name: "Bộ xếp hình màu RainbowBee", brand: "KidBee", type: "Xếp hình", price: 190000, img: "https://images.pexels.com/photos/1148998/pexels-photo-1148998.jpeg" },
+            { id: "s3", cat: "stem", name: "Bộ lắp ráp Robot MiniBee", brand: "HoneyToy", type: "STEM", price: 450000, img: "https://images.pexels.com/photos/256417/pexels-photo-256417.jpeg" },
+            { id: "s4", cat: "stem", name: "Bộ thí nghiệm khoa học BeeLab", brand: "BeeSoft", type: "STEM", price: 380000, img: "https://images.pexels.com/photos/256417/pexels-photo-256417.jpeg" },
+            { id: "s5", cat: "stem", name: "Đất nặn sáng tạo SweetBee", brand: "ToyBee", type: "Đất nặn", price: 120000, img: "https://images.pexels.com/photos/3661195/pexels-photo-3661195.jpeg" },
+            { id: "s6", cat: "stem", name: "Bảng nam châm chữ số BeeMath", brand: "KidBee", type: "Giáo dục", price: 160000, img: "https://images.pexels.com/photos/5904930/pexels-photo-5904930.jpeg" },
+            { id: "s7", cat: "stem", name: "Bộ cờ vua mini BeeChess", brand: "HoneyToy", type: "Giáo dục", price: 140000, img: "https://images.pexels.com/photos/4112075/pexels-photo-4112075.jpeg" },
+            { id: "s8", cat: "stem", name: "Bộ lego sáng tạo BeeBricks 300pcs", brand: "BeeSoft", type: "Xếp hình", price: 520000, img: "https://images.pexels.com/photos/1630368/pexels-photo-1630368.jpeg" },
+            { id: "s9", cat: "stem", name: "Bộ câu cá từ BeeFish", brand: "ToyBee", type: "Playset", price: 130000, img: "https://images.pexels.com/photos/3661397/pexels-photo-3661397.jpeg" },
+            { id: "s10", cat: "stem", name: "Bộ xếp hình thành phố BeeCity", brand: "HoneyToy", type: "Xếp hình", price: 390000, img: "https://images.pexels.com/photos/1148998/pexels-photo-1148998.jpeg" }
+        ];
+
+        function money(v) {
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(v);
+        }
+
+        function isLogged() {
+            return typeof isLoggedIn === 'function'
+                ? isLoggedIn()
+                : !!localStorage.getItem('toybee_current');
+        }
+
+        let currentProducts = [];
+        let logged = false;
+
+        function initCategory() {
+            logged = isLogged();
+
+            const params = new URLSearchParams(location.search);
+            const cat = params.get('cat');
+
+            if (cat && cat !== 'all') {
+                currentProducts = ALL_PRODUCTS.filter(p => p.cat === cat);
+            } else {
+                currentProducts = ALL_PRODUCTS.slice();
+            }
+
+            const title = document.getElementById('catTitle');
+            if (cat === 'plush') title.textContent = 'Tất cả Gấu bông';
+            else if (cat === 'hero') title.textContent = 'Tất cả Siêu nhân';
+            else if (cat === 'vehicle') title.textContent = 'Tất cả Xe đồ chơi';
+            else if (cat === 'stem') title.textContent = 'Tất cả đồ chơi STEM';
+            else title.textContent = 'Tất cả sản phẩm';
+
+            renderFilterOptions();
+            renderProductCards();
+            attachFilterEvents();
+        }
+
+        function renderFilterOptions() {
+            const brandSet = new Set();
+            const typeSet = new Set();
+            currentProducts.forEach(p => {
+                if (p.brand) brandSet.add(p.brand);
+                if (p.type) typeSet.add(p.type);
+            });
+
+            const brandList = document.getElementById('brandList');
+            const typeList = document.getElementById('typeList');
+            brandList.innerHTML = '';
+            typeList.innerHTML = '';
+
+            brandSet.forEach(b => {
+                const lb = document.createElement('label');
+                lb.innerHTML = `<input type="checkbox" name="brand" value="${b}"> ${b}`;
+                brandList.appendChild(lb);
+            });
+
+            typeSet.forEach(t => {
+                const lb = document.createElement('label');
+                lb.innerHTML = `<input type="checkbox" name="type" value="${t}"> ${t}`;
+                typeList.appendChild(lb);
+            });
+        }
+
+        function renderProductCards() {
+            const list = document.getElementById('catList');
+            list.innerHTML = '';
+
+            currentProducts.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'cat-card product-card';
+                card.dataset.id = p.id;
+                card.dataset.brand = p.brand;
+                card.dataset.type = p.type;
+                card.dataset.price = p.price;
+
+                card.innerHTML = `
+                    <img src="${p.img}" alt="${p.name}">
+                    <div class="title">${p.name}</div>
+                    <div class="meta">
+                        <div>Thương hiệu: <strong>${p.brand}</strong></div>
+                        <div>Loại: <strong>${p.type}</strong></div>
+                    </div>
+                    <div class="price"></div>
+                    <div class="actions">
+                        <button class="btn add-cart-btn">Thêm giỏ hàng</button>
+                        <button class="btn buy-btn ghost">Mua ngay</button>
+                    </div>
+                `;
+
+                const priceEl = card.querySelector('.price');
+                priceEl.textContent = logged
+                    ? money(p.price)
+                    : 'Đăng nhập để thấy giá';
+
+                list.appendChild(card);
+            });
+
+            bindButtonsForCards();
+        }
+
+        function bindButtonsForCards() {
+            document.querySelectorAll('.cat-card').forEach(card => {
+                const id = card.dataset.id;
+                const price = Number(card.dataset.price);
+                const brand = card.dataset.brand;
+                const type = card.dataset.type;
+                const name = card.querySelector('.title').textContent.trim();
+                const img = card.querySelector('img').src;
+                const product = { id, name, price, images: [img], brand, type };
+
+                const addBtn = card.querySelector('.add-cart-btn');
+                const buyBtn = card.querySelector('.buy-btn');
+
+                if (addBtn) {
+                    addBtn.onclick = e => {
+                        e.preventDefault();
+                        if (typeof addToCart === 'function' && addToCart(product)) {
+                            if (typeof openCart === 'function') openCart();
+                        }
+                    };
+                }
+
+                if (buyBtn) {
+                    buyBtn.onclick = e => {
+                        e.preventDefault();
+                        if (typeof addToCart === 'function' && addToCart(product)) {
+                            location.href = 'cart.html';
+                        }
+                    };
+                }
+            });
+        }
+
+        function getChecked(name) {
+            return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`))
+                .map(i => i.value);
+        }
+
+        function applyFilters() {
+            const selectedBrands = getChecked('brand');
+            const selectedTypes = getChecked('type');
+            const selectedPrice = getChecked('price');
+
+            currentProducts.forEach(p => {
+                const card = document.querySelector(`.cat-card[data-id="${p.id}"]`);
+                if (!card) return;
+
+                let visible = true;
+
+                if (selectedBrands.length && !selectedBrands.includes(p.brand)) {
+                    visible = false;
+                }
+
+                if (visible && selectedTypes.length && !selectedTypes.includes(p.type)) {
+                    visible = false;
+                }
+
+                if (visible && selectedPrice.length) {
+                    let ok = false;
+                    for (const r of selectedPrice) {
+                        if (r === 'lt100' && p.price < 100000) ok = true;
+                        if (r === '100-300' && p.price >= 100000 && p.price <= 300000) ok = true;
+                        if (r === 'gt300' && p.price > 300000) ok = true;
+                    }
+                    if (!ok) visible = false;
+                }
+
+                card.style.display = visible ? '' : 'none';
+            });
+        }
+
+        function attachFilterEvents() {
+            document.querySelectorAll('.cat-filter input').forEach(input => {
+                input.addEventListener('change', applyFilters);
+            });
+        }
+
+        // Khởi chạy
+        initCategory();
+    </script>
+</body>
+
+</html>
