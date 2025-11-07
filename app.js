@@ -172,9 +172,9 @@ function addToCart(p) {
     if (item) item.qty += 1;
     else cart.push({ id: p.id, name: p.name, price: p.price, img: p.images[0], qty: 1 });
     saveCart(cart);
-    renderMiniCart();
-    openCart();
+    renderMiniCart(); // KHÔNG openCart ở đây
 }
+
 function changeQty(id, delta) {
     const cart = loadCart();
     const it = cart.find(i => i.id === id);
@@ -206,42 +206,63 @@ function makeCard(p) {
       <div class="name">${p.name}</div>
       <div class="tags">${p.tags.join(' • ')}</div>
       <div class="price">${money(p.price)}</div>
-      <button class="btn buy-btn add-btn">Mua ngay</button>
+      <div class="card-actions">
+        <button class="btn add-cart-btn">Thêm giỏ hàng</button>
+        <button class="btn buy-btn ghost">Mua ngay</button>
+      </div>
     </div>
   `;
+
     const img = $('img', wrap);
+    const addBtn = $('.add-cart-btn', wrap);
+    const buyBtn = $('.buy-btn', wrap);
 
-    // click ảnh => thêm vào giỏ
-    img.addEventListener('click', (e) => {
-        e.stopPropagation();
-        addToCart(p);
-    });
-
-    // click nút Mua ngay => thêm vào giỏ
-    $('.add-btn', wrap).addEventListener('click', (e) => {
-        e.stopPropagation();
-        addToCart(p);
-    });
-
-    // click card (không phải nút) => slideshow ảnh sản phẩm
+    /* Hover 1s rồi auto đổi ảnh */
+    let hoverTimer = null;
+    let slideTimer = null;
     let idx = 0;
-    wrap.addEventListener('click', (e) => {
-        if (e.target.closest('.add-btn') || e.target === img) return;
-        const id = p.id;
-        if (runningSlides.has(id)) return;
-        const itv = setInterval(() => {
-            idx = (idx + 1) % p.images.length;
-            img.src = p.images[idx];
-            if (idx === p.images.length - 1) {
-                clearInterval(itv);
-                runningSlides.delete(id);
-            }
+
+    wrap.addEventListener('mouseenter', () => {
+        // chờ 1s rồi mới bắt đầu slide
+        hoverTimer = setTimeout(() => {
+            if (p.images.length <= 1) return;
+            slideTimer = setInterval(() => {
+                idx = (idx + 1) % p.images.length;
+                img.src = p.images[idx];
+            }, 1000);
         }, 1000);
-        runningSlides.set(id, itv);
+    });
+
+    wrap.addEventListener('mouseleave', () => {
+        if (hoverTimer) {
+            clearTimeout(hoverTimer);
+            hoverTimer = null;
+        }
+        if (slideTimer) {
+            clearInterval(slideTimer);
+            slideTimer = null;
+        }
+        idx = 0;
+        img.src = p.images[0]; // trả về ảnh đầu
+    });
+
+    /* Thêm giỏ hàng -> chỉ thêm + mở thanh bên */
+    addBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        addToCart(p);   // chỉ xử lý dữ liệu
+        openCart();     // mở panel bên phải
+    });
+
+    /* Mua ngay -> thêm + sang trang giỏ hàng */
+    buyBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        addToCart(p);
+        window.location.href = 'cart.html';
     });
 
     return wrap;
 }
+
 
 let ring = PRODUCTS.slice();
 function renderProducts() {
