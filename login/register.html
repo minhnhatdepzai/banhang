@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ToyBee – Đăng ký</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .auth-card {
+            width: min(620px, 92%);
+            margin: 80px auto;
+            background: #132822;
+            border: 1px solid #1b3b33;
+            border-radius: 18px;
+            padding: 22px
+        }
+
+        .auth-card h1 {
+            margin: 0 0 6px
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin: 10px 0
+        }
+
+        .field input {
+            padding: 10px 12px;
+            border-radius: 12px;
+            border: 1px solid #1b3b33;
+            background: #0f231d;
+            color: #e9f6ef
+        }
+
+        .muted {
+            color: #98b2a9
+        }
+
+        .row {
+            display: flex;
+            gap: 10px;
+            align-items: center
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="../index.html" class="brand">ToyBee</a>
+            <div style="flex:1"></div>
+            <a href="login.html" class="btn ghost">Đăng nhập</a>
+        </div>
+    </header>
+
+    <div class="auth-card">
+        <h1>Đăng ký tài khoản</h1>
+        <p class="muted">Bắt buộc tick đồng ý chính sách mới đăng ký được.</p>
+
+        <div class="field">
+            <label>Tài khoản (số điện thoại)</label>
+            <input id="acc" type="text">
+        </div>
+        <div class="field">
+            <label>Mật khẩu</label>
+            <input id="pwd" type="password">
+        </div>
+        <div class="field">
+            <label>Tên hiển thị</label>
+            <input id="name" type="text">
+        </div>
+        <div class="field">
+            <label>Email</label>
+            <input id="email" type="email">
+        </div>
+
+        <label class="row" style="margin:8px 0 14px">
+            <input type="checkbox" id="policy">
+            <span>Tôi đã đọc, đồng ý với <u>Chính sách bảo vệ dữ liệu cá nhân</u> &amp; <u>Quy định sử dụng của
+                    Sapo</u></span>
+        </label>
+
+        <div class="row" style="justify-content:space-between">
+            <a href="login.html" class="link">Đã có tài khoản?</a>
+            <button id="btnReg" class="btn">Đăng ký</button>
+        </div>
+
+        <p id="msg" class="muted" style="margin-top:10px"></p>
+    </div>
+
+    <script>
+        function ensureDefaultUser() {
+            const users = JSON.parse(localStorage.getItem('toybee_users') || '[]');
+            if (!users.find(u => u.account === '0901234567')) {
+                users.push({ account: '0901234567', password: 'matkhaune123', name: 'Lê Minh Nhật', email: 'nhat@example.com' });
+                localStorage.setItem('toybee_users', JSON.stringify(users));
+            }
+        }
+        ensureDefaultUser();
+
+        const acc = document.getElementById('acc');
+        const pwd = document.getElementById('pwd');
+        const nameInput = document.getElementById('name');
+        const email = document.getElementById('email');
+        const policy = document.getElementById('policy');
+        const msg = document.getElementById('msg');
+
+        document.getElementById('btnReg').addEventListener('click', () => {
+            const a = acc.value.trim();
+            const p = pwd.value;
+            const n = nameInput.value.trim();
+            const e = email.value.trim();
+
+            if (!a || !p || !n || !e) {
+                msg.textContent = "Vui lòng điền đủ thông tin.";
+                return;
+            }
+            if (!policy.checked) {
+                msg.textContent = "Bạn phải tích đồng ý chính sách.";
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('toybee_users') || '[]');
+            if (users.find(u => u.account === a)) {
+                msg.textContent = "Tài khoản đã tồn tại.";
+                return;
+            }
+            users.push({ account: a, password: p, name: n, email: e });
+            localStorage.setItem('toybee_users', JSON.stringify(users));
+            msg.textContent = "Đăng ký thành công! Quay về trang đăng nhập...";
+            setTimeout(() => location.href = 'login.html', 800);
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ToyBee – Giỏ hàng</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="index.html#home" class="brand">ToyBee</a>
+            <nav class="main-nav">
+                <a href="index.html#home">Trang Chủ</a>
+                <a href="index.html#about">Giới thiệu</a>
+                <a href="index.html#products">Sản Phẩm</a>
+                <a href="index.html#contact">Liên hệ</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container cart-page">
+        <h1>Giỏ hàng của bạn</h1>
+
+        <div id="cartLayout" class="cart-layout">
+            <div id="cartPageList"></div>
+
+            <div class="cart-summary-box">
+                <h3>Cộng giỏ hàng</h3>
+                <div class="row">
+                    <span>Tạm tính</span>
+                    <span id="cpSubtotal">0đ</span>
+                </div>
+                <div class="row">
+                    <span>Giảm giá</span>
+                    <span id="cpDiscount">0đ</span>
+                </div>
+                <div class="row total">
+                    <span>Tổng</span>
+                    <span id="cpTotal">0đ</span>
+                </div>
+
+                <div class="coupon">
+                    <label>Mã ưu đãi</label>
+                    <input id="cpCode" type="text" placeholder="Nhập giamgia1 hoặc giamgia2">
+                    <button id="cpApply" class="btn">Áp dụng</button>
+                    <p id="cpMsg" class="muted"></p>
+                </div>
+
+                <button id="cpCheckout" class="btn full black">Tiến hành thanh toán</button>
+            </div>
+        </div>
+
+        <div id="successBox" class="success-box" style="display:none;">
+            <div class="success-banner">Thanh toán thành công</div>
+            <h2 id="successText">Cảm ơn bạn đã mua hàng!</h2>
+            <p class="muted" id="successNote"></p>
+            <button class="btn" onclick="location.href='index.html'">Quay lại trang chủ</button>
+        </div>
+    </div>
+
+    <script>
+        const money = v => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(v);
+        const loadCart = () => JSON.parse(localStorage.getItem('toybee_cart') || '[]');
+        const saveCart = (c) => localStorage.setItem('toybee_cart', JSON.stringify(c));
+
+        const listEl = document.getElementById('cartPageList');
+        const subEl = document.getElementById('cpSubtotal');
+        const disEl = document.getElementById('cpDiscount');
+        const totEl = document.getElementById('cpTotal');
+        const msgEl = document.getElementById('cpMsg');
+        const layoutEl = document.getElementById('cartLayout');
+        const successBox = document.getElementById('successBox');
+        const successText = document.getElementById('successText');
+        const successNote = document.getElementById('successNote');
+
+        let discountRate = 0;
+
+        function renderCartPage() {
+            const cart = loadCart();
+            listEl.innerHTML = '';
+
+            if (cart.length === 0) {
+                listEl.innerHTML = '<p class="cart-list-empty">Giỏ hàng trống. Hãy quay lại trang chủ để chọn sản phẩm nhé.</p>';
+                subEl.textContent = disEl.textContent = totEl.textContent = money(0);
+                return;
+            }
+
+            cart.forEach(it => {
+                const row = document.createElement('div');
+                row.className = 'cp-item';
+                row.innerHTML = `
+        <div class="cp-img"><img src="${it.img}" alt=""></div>
+        <div class="cp-name">${it.name}</div>
+        <div class="cp-price">${money(it.price)}</div>
+        <div class="cp-qty">
+          <button data-act="dec">-</button>
+          <span>${it.qty}</span>
+          <button data-act="inc">+</button>
+        </div>
+        <div class="cp-sub">${money(it.price * it.qty)}</div>
+        <button class="cp-remove">&times;</button>
+      `;
+
+                const [dec, inc] = row.querySelectorAll('.cp-qty button');
+                dec.addEventListener('click', () => changeQty(it.id, -1));
+                inc.addEventListener('click', () => changeQty(it.id, 1));
+                row.querySelector('.cp-remove').addEventListener('click', () => removeItem(it.id));
+                listEl.appendChild(row);
+            });
+
+            updateTotals();
+        }
+
+        function changeQty(id, delta) {
+            const cart = loadCart();
+            const it = cart.find(i => i.id === id);
+            if (!it) return;
+            it.qty += delta;
+            if (it.qty <= 0) {
+                const idx = cart.indexOf(it);
+                cart.splice(idx, 1);
+            }
+            saveCart(cart);
+            renderCartPage();
+        }
+
+        function removeItem(id) {
+            const cart = loadCart().filter(i => i.id !== id);
+            saveCart(cart);
+            renderCartPage();
+        }
+
+        function updateTotals() {
+            const cart = loadCart();
+            let sub = 0;
+            cart.forEach(i => sub += i.price * i.qty);
+            const discount = Math.round(sub * discountRate);
+            const total = sub - discount;
+            subEl.textContent = money(sub);
+            disEl.textContent = '-' + money(discount);
+            totEl.textContent = money(total);
+        }
+
+        document.getElementById('cpApply').addEventListener('click', () => {
+            const code = document.getElementById('cpCode').value.trim().toLowerCase();
+            if (code === 'giamgia1') {
+                discountRate = 0.10;
+                msgEl.textContent = 'Áp dụng mã GIAMGIA1: giảm 10%.';
+            } else if (code === 'giamgia2') {
+                discountRate = 0.20;
+                msgEl.textContent = 'Áp dụng mã GIAMGIA2: giảm 20%.';
+            } else if (!code) {
+                discountRate = 0;
+                msgEl.textContent = 'Đã xoá mã ưu đãi.';
+            } else {
+                discountRate = 0;
+                msgEl.textContent = 'Mã không hợp lệ.';
+            }
+            updateTotals();
+        });
+
+        document.getElementById('cpCheckout').addEventListener('click', () => {
+            const cart = loadCart();
+            if (cart.length === 0) {
+                msgEl.textContent = 'Giỏ hàng đang trống, không thể thanh toán.';
+                return;
+            }
+            updateTotals();
+
+            // Lấy tên user (nếu có)
+            const user = JSON.parse(localStorage.getItem('toybee_current') || 'null');
+            const name = (user && (user.name || user.account)) || 'bạn';
+
+            // "Thanh toán thành công"
+            layoutEl.style.display = 'none';
+            successBox.style.display = 'block';
+            successText.textContent = `Cảm ơn bạn ${name} ad94 đã mua hàng!`;
+            successNote.textContent = 'Đơn hàng của bạn đã được ghi nhận. Chúng tôi sẽ liên hệ để xác nhận và giao hàng trong thời gian sớm nhất.';
+
+            // Xoá giỏ
+            saveCart([]);
+        });
+
+        renderCartPage();
+    </script>
+</body>
+
+</html>

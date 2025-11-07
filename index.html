@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ToyBee – Cửa hàng đồ chơi</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+    <!-- HEADER cố định -->
+    <header class="site-header" id="header">
+        <div class="container header-inner">
+            <a href="#home" class="brand">ToyBee</a>
+
+            <nav class="main-nav">
+                <a href="#home" data-link>Trang Chủ</a>
+                <a href="#about" data-link>Giới thiệu</a>
+                <a href="#products" data-link>Sản Phẩm</a>
+                <a href="#contact" data-link>Liên hệ</a>
+            </nav>
+
+            <div class="auth-area" id="authArea">
+                <a class="btn ghost" href="login/login.html">Đăng nhập</a>
+                <a class="btn" href="login/register.html">Đăng ký</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- NÚT LÊN ĐẦU TRANG -->
+    <button id="backToTop" aria-label="Lên đầu trang">↑</button>
+
+    <main>
+        <!-- PHẦN 1: HERO -->
+        <section id="home" class="section hero">
+            <div class="container hero-grid">
+                <div class="hero-text reveal">
+                    <h1>ToyBee – Thế giới đồ chơi mật ong 🧸</h1>
+                    <p>
+                        Giao diện cảm hứng Honey Bee Farm, tối ưu để trưng bày bộ sưu tập đồ chơi
+                        dễ thương, hiện đại, thân thiện với mọi thiết bị.
+                    </p>
+                    <div class="hero-cta">
+                        <a href="#products" class="btn">Mua ngay</a>
+                        <a href="#about" class="btn ghost">Xem giới thiệu</a>
+                    </div>
+                    <p class="hint">
+                        2 khung giao diện tablet &amp; mobile chồng lên nhau bên phải.
+                        Click vào từng thiết bị để xem demo khác nhau.
+                    </p>
+                </div>
+
+                <!-- 2 thiết bị chồng lên nhau -->
+                <div class="device-showcase reveal">
+                    <div class="device device-tablet">
+                        <img id="tabletImg" src="img/hero-tablet.jpg" alt="Giao diện tablet">
+                    </div>
+                    <div class="device device-mobile">
+                        <img id="mobileImg" src="img/hero-mobile.jpg" alt="Giao diện mobile">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PHẦN 2: GIỚI THIỆU SẢN PHẨM -->
+        <section id="about" class="section about">
+            <div class="container">
+                <h2 class="reveal">Giới thiệu sản phẩm</h2>
+
+                <div class="about-wrap reveal">
+                    <!-- Bên trái: nội dung dài -->
+                    <div class="about-left">
+                        <div id="aboutClamp" class="about-clamp">
+                            <p>
+                                Tại <strong>ToyBee</strong>, mỗi món đồ chơi được chọn như từng giọt mật ong tinh khiết:
+                                ngọt ngào, an toàn và chứa đầy năng lượng sáng tạo cho trẻ.
+                            </p>
+                            <p>
+                                Đồ chơi không chỉ để “cho vui”, mà là người bạn đồng hành giúp bé khám phá thế giới,
+                                rèn luyện tư duy logic, sự tập trung và khả năng giao tiếp.
+                                Vì thế mọi sản phẩm trên ToyBee đều có:
+                            </p>
+                            <ul>
+                                <li>
+                                    <strong>Thông tin minh bạch:</strong> độ tuổi phù hợp, chất liệu, chứng nhận an
+                                    toàn,
+                                    hướng dẫn chi tiết bằng tiếng Việt.
+                                </li>
+                                <li>
+                                    <strong>Thiết kế bắt mắt:</strong> màu sắc tươi, chi tiết sắc nét, lên hình đẹp,
+                                    giúp shop của bạn quảng cáo trên Facebook/TikTok cực dễ.
+                                </li>
+                                <li>
+                                    <strong>Dòng STEM &amp; lắp ráp:</strong> robot mini, bộ máy móc, thí nghiệm vui –
+                                    giúp bé vừa chơi vừa học, mê khám phá hơn màn hình.
+                                </li>
+                                <li>
+                                    <strong>Thú bông &amp; gối ôm cao cấp:</strong> siêu mềm, không xù lông, an toàn khi
+                                    ôm cả đêm.
+                                </li>
+                                <li>
+                                    <strong>Đồ chơi nhập vai:</strong> bếp nhí, bác sĩ, siêu thị mini… cho bé sáng tạo
+                                    câu chuyện
+                                    và học cách quan tâm người khác.
+                                </li>
+                                <li>
+                                    <strong>Mô hình &amp; figure sưu tầm:</strong> dành cho cả bé lớn &amp; người lớn,
+                                    trang trí bàn học, bàn làm việc thêm “chill”.
+                                </li>
+                                <li>
+                                    Chính sách <strong>đổi trả linh hoạt</strong>, bọc quà đẹp, giao hàng nhanh, giúp
+                                    bạn giữ chân
+                                    khách ngay từ lần mua đầu tiên.
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="about-more">
+                            <button id="btnMore" class="link">Xem thêm ▾</button>
+                        </div>
+                    </div>
+
+                    <!-- Bên phải: nhiều ảnh tương tác -->
+                    <div class="about-right">
+                        <div class="toy-grid">
+                            <div class="toy-card" data-toy="stem">
+                                <img src="img/about-stem-1.jpg" alt="Đồ chơi STEM ToyBee">
+                                <div class="toy-label">STEM Lab Kit – Click để bật sáng ✨</div>
+                            </div>
+                            <div class="toy-card" data-toy="plush">
+                                <img src="img/about-plush-1.jpg" alt="Thú bông ToyBee">
+                                <div class="toy-label">HoneyBear Plush – Ôm là mê 🧸</div>
+                            </div>
+                            <div class="toy-card" data-toy="figure">
+                                <img src="img/about-figure-1.jpg" alt="Mô hình &amp; figure ToyBee">
+                                <div class="toy-label">Figure sưu tầm – Góc bàn đẳng cấp 🐝</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PHẦN 3: SẢN PHẨM + GIỎ HÀNG MINI -->
+        <section id="products" class="section products">
+            <div class="container">
+                <div class="products-head">
+                    <h2 class="reveal">Sản phẩm nổi bật</h2>
+                    <p class="muted reveal">
+                        Nhấn vào <strong>ảnh</strong> hoặc nút <strong>Mua ngay</strong> để thêm vào giỏ.
+                        Giỏ hàng sẽ mở ở bên phải, cho phép tăng/giảm số lượng.
+                    </p>
+                </div>
+
+                <div class="carousel reveal">
+                    <button class="nav left" id="prevBtn" aria-label="Trước">‹</button>
+                    <div class="viewport" id="viewport"></div>
+                    <button class="nav right" id="nextBtn" aria-label="Sau">›</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- PHẦN 4: LIÊN HỆ -->
+        <section id="contact" class="section contact">
+            <div class="container">
+                <h2 class="reveal">Liên hệ</h2>
+                <div class="contact-box reveal">
+                    <div class="contact-left">
+                        <h3>ToyBee – Cửa hàng đồ chơi</h3>
+                        <p><strong>Địa chỉ:</strong> Công Viên Phần Mềm Quang Trung, Quận 12, TP.HCM</p>
+                        <p><strong>Hotline:</strong> 0901 234 567</p>
+                        <p><strong>Email:</strong> hello@toybee.vn</p>
+                        <p><strong>Giờ làm việc:</strong> 08:30 – 21:30 (Thứ 2 – Chủ nhật)</p>
+                    </div>
+                    <div class="contact-right">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.435594372665!2d106.62482370893561!3d10.854436289254446!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752bee0b0ef9e5%3A0x5b4da59e47aa97a8!2zQ8O0bmcgVmnDqm4gUGjhuqduIE3hu4FtIFF1YW5nIFRydW5n!5e0!3m2!1svi!2s!4v1762477077950!5m2!1svi!2s"
+                            width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div>
+                <h3 class="footer-brand">ToyBee</h3>
+                <p>Cửa hàng đồ chơi sáng tạo lấy cảm hứng từ tổ ong – an toàn, chính hãng, giao nhanh toàn quốc.</p>
+            </div>
+            <div>
+                <h4>Danh mục</h4>
+                <ul>
+                    <li><a href="#products">Đồ chơi giáo dục</a></li>
+                    <li><a href="#products">Mô hình &amp; figure</a></li>
+                    <li><a href="#products">Thú bông &amp; quà tặng</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4>Hỗ trợ khách hàng</h4>
+                <ul>
+                    <li>Hotline: 0901 234 567</li>
+                    <li>Email: support@toybee.vn</li>
+                    <li>CSKH: 8:30 - 21:30 (T2-CN)</li>
+                </ul>
+            </div>
+            <div>
+                <h4>Kết nối với ToyBee</h4>
+                <div class="footer-socials">
+                    <a href="#">Facebook</a>
+                    <a href="#">Instagram</a>
+                    <a href="#">Tiktok</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © <span id="y"></span> ToyBee. Powered by Nhật.
+        </div>
+    </footer>
+
+    <!-- MINI CART PANE -->
+    <div id="cartOverlay" class="cart-overlay"></div>
+
+    <aside id="cartPanel" class="cart-panel">
+        <div class="cart-header">
+            <h3>Giỏ hàng</h3>
+            <button id="cartClose" class="cart-close">&times;</button>
+        </div>
+        <div id="cartItems" class="cart-items">
+            <!-- render bằng JS -->
+        </div>
+        <div class="cart-summary">
+            <div class="cart-row">
+                <span>Tổng phụ:</span>
+                <span id="cartSubtotal">0đ</span>
+            </div>
+            <button id="viewCartBtn" class="btn full">Xem giỏ hàng</button>
+            <button id="checkoutBtn" class="btn full black">Thanh toán</button>
+        </div>
+    </aside>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

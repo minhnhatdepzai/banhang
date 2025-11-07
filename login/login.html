@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ToyBee – Đăng nhập</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        .auth-card {
+            width: min(520px, 92%);
+            margin: 80px auto;
+            background: #132822;
+            border: 1px solid #1b3b33;
+            border-radius: 18px;
+            padding: 22px
+        }
+
+        .auth-card h1 {
+            margin: 0 0 6px
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin: 10px 0
+        }
+
+        .field input {
+            padding: 10px 12px;
+            border-radius: 12px;
+            border: 1px solid #1b3b33;
+            background: #0f231d;
+            color: #e9f6ef
+        }
+
+        .muted {
+            color: #98b2a9
+        }
+
+        .row {
+            display: flex;
+            gap: 10px
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="../index.html" class="brand">ToyBee</a>
+            <div style="flex:1"></div>
+            <a href="register.html" class="btn ghost">Đăng ký</a>
+        </div>
+    </header>
+
+    <div class="auth-card">
+        <h1>Đăng nhập</h1>
+        <p class="muted">Tài khoản mặc định: <b>0901234567</b> / <b>matkhaune123</b></p>
+
+        <div class="field">
+            <label>Tài khoản</label>
+            <input id="acc" type="text" value="0901234567">
+        </div>
+        <div class="field">
+            <label>Mật khẩu</label>
+            <input id="pwd" type="password" value="matkhaune123">
+        </div>
+
+        <div class="row" style="justify-content:space-between; align-items:center">
+            <a href="register.html" class="link">Chưa có tài khoản?</a>
+            <button id="btnLogin" class="btn">Đăng nhập</button>
+        </div>
+        <p id="msg" class="muted" style="margin-top:10px"></p>
+    </div>
+
+    <script>
+        function ensureDefaultUser() {
+            const users = JSON.parse(localStorage.getItem('toybee_users') || '[]');
+            if (!users.find(u => u.account === '0901234567')) {
+                users.push({ account: '0901234567', password: 'matkhaune123', name: 'Lê Minh Nhật', email: 'nhat@example.com' });
+                localStorage.setItem('toybee_users', JSON.stringify(users));
+            }
+        }
+        ensureDefaultUser();
+
+        const acc = document.getElementById('acc');
+        const pwd = document.getElementById('pwd');
+        const msg = document.getElementById('msg');
+
+        document.getElementById('btnLogin').addEventListener('click', () => {
+            const users = JSON.parse(localStorage.getItem('toybee_users') || '[]');
+            const u = users.find(x => x.account === acc.value.trim() && x.password === pwd.value);
+            if (u) {
+                localStorage.setItem('toybee_current', JSON.stringify(u));
+                msg.textContent = "Đăng nhập thành công!";
+                setTimeout(() => location.href = '../index.html', 600);
+            } else {
+                msg.textContent = "Sai tài khoản hoặc mật khẩu.";
+            }
+        });
+    </script>
+</body>
+
+</html>
