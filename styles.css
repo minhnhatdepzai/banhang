@@ -419,6 +419,24 @@ body {
     margin-bottom: 6px
 }
 
+.card-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 4px;
+}
+
+.card .add-cart-btn {
+    flex: 1;
+    padding: 6px 8px;
+    font-size: 13px;
+}
+
+.card .buy-btn {
+    padding: 6px 8px;
+    font-size: 13px;
+}
+
+
 .card .buy-btn {
     margin-top: 4px;
     padding: 6px 10px;
